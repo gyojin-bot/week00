@@ -41,8 +41,12 @@
 
     <!-- SCRIPT -->
     <script>
-        function clickSignUp() {
-            console.log('Sign Up')
+        function join() {
+            console.log('로그인 완료!')
+        }
+
+        function createAccount() {
+            alert("계정 생성 완료")
         }
     </script>
 
@@ -63,7 +67,7 @@
             </label>
         </div>
         <div class="div-btn">
-            <button type="button" class="btn btn-primary">로그인</button>
+            <button onclick="join()" type="button" class="btn btn-primary">로그인</button>
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">회원가입</button>
         </div>
     </div>
@@ -92,7 +96,7 @@
 
             <!-- Modal footer -->
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">완료</button>
+                <button onclick="createAccount()" type="button" class="btn btn-danger" data-dismiss="modal">완료</button>
                 <button type="button" class="btn btn-danger" data-dismiss="modal">닫기</button>
             </div>
         </div>
