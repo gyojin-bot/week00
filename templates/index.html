@@ -41,13 +41,39 @@
 
     <!-- SCRIPT -->
     <script>
-        function join() {
-            console.log('로그인 완료!')
+        function login() {
+            let id = $("#input-id").val();
+            let pw = $("#input-pw").val();
+
+            $.ajax({
+                type: "POST",
+                url: "/login",
+                data: { 'id_give': id, 'pw_give': pw },
+                success: function (response) { // 성공하면
+                    if (response["result"] == "success") {
+                        alert(response["로그인 완료!"]);
+                    }
+                }
+            })
         }
 
-        function createAccount() {
-            alert("계정 생성 완료")
+
+        function register() {
+            let id = $("#create-id").val();
+            let pw = $("#create-pw").val();
+
+            $.ajax({
+                type: "POST",
+                url: "/register",
+                data: {'id_give': id, 'pw_give': pw},
+                success: function (response) { // 성공하면
+                    if (response["result"] == "success") {
+                        alert(response["회원가입 완료!"]);
+                    }
+                }
+            })
         }
+
     </script>
 
 </head>
@@ -67,7 +93,7 @@
             </label>
         </div>
         <div class="div-btn">
-            <button onclick="join()" type="button" class="btn btn-primary">로그인</button>
+            <button onclick="login()" type="button" class="btn btn-primary">로그인</button>
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">회원가입</button>
         </div>
     </div>
@@ -96,7 +122,7 @@
 
             <!-- Modal footer -->
             <div class="modal-footer">
-                <button onclick="createAccount()" type="button" class="btn btn-danger" data-dismiss="modal">완료</button>
+                <button onclick="register()" type="button" class="btn btn-danger" data-dismiss="modal">완료</button>
                 <button type="button" class="btn btn-danger" data-dismiss="modal">닫기</button>
             </div>
         </div>
