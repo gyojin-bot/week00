@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- 구글폰트 -->
+    <link href="https://fonts.googleapis.com/css?family=Stylish&display=swap" rel="stylesheet">
+
+    <title>WEEK00</title>
+
+    <!-- STYLE -->
+    <style type="text/css">
+        body {
+            background-color: aliceblue;
+        }
+
+        * {
+            font-family: "Stylish", sans-serif;
+        }
+
+        .display-4 {
+            text-align: center;
+        }
+
+        .div-btn {
+            margin-top: 0.5rem;
+        }
+
+    </style>
+
+    <!-- SCRIPT -->
+    <script>
+        function clickSignUp() {
+            console.log('Sign Up')
+        }
+    </script>
+
+</head>
+
+<body>
+<div class="jumbotron">
+    <div id="post-box" class="form-post">
+        <h1 class="display-4">WEEK 00</h1>
+        <div class="index-input">
+            <label for="input-id">ID
+                <input id="input-id" class="form-control" placeholder="아이디를 입력해주세요.">
+            </label>
+        </div>
+        <div class="index-input">
+            <label for="input-pw">PW
+                <input id="input-pw" class="form-control" placeholder="비밀번호를 입력해주세요.">
+            </label>
+        </div>
+        <div class="div-btn">
+            <button type="button" class="btn btn-primary">로그인</button>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">회원가입</button>
+        </div>
+    </div>
+</div>
+
+<!-- The Modal -->
+<div class="modal" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">회원가입하기</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <label for="create-id">ID</label>
+                <input id="create-id" class="form-control" placeholder="아이디를 입력해주세요.">
+                <label for="create-pw">PW</label>
+                <input id="create-pw" class="form-control" placeholder="비밀번호를 입력해주세요.">
+                <label for="check"-pw">PW</label>
+                <input id="check-pw" class="form-control" placeholder="비밀번호를 다시 입력해주세요.">
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">완료</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
