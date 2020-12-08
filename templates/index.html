@@ -50,7 +50,14 @@
                 url: "/login",
                 data: {'id_give': id, 'pw_give': pw},
                 success: function (response) { // 성공하면
-                    window.location.href = "http://localhost:5000/card"
+                    if (response["result"] == "success") {
+                        alert("로그인 완료!");
+                        window.location.href = "http://localhost:5000/card";
+                    }
+                    else {
+                        alert("로그인 실패!");
+                        window.location.reload();
+                    }
                 }
             })
         }
@@ -66,7 +73,8 @@
                 data: {'id_give': id, 'pw_give': pw},
                 success: function (response) { // 성공하면
                     if (response["result"] == "success") {
-                        alert(response["회원가입 완료!"]);
+                        alert("회원가입 완료!");
+                        window.location.reload();
                     }
                 }
             })

@@ -50,8 +50,8 @@
         </style>
         <script>
             $(document).ready(function () {
-                // $("#cards-box").html("");
-                // showArticles();
+                $("#cards-box").html("");
+                showGourmet();
                 $("#post-box").hide();
             });
 
@@ -69,36 +69,92 @@
                     $("#btn-post-box").text("포스팅 박스 닫기");
                 }
             }
-            //dddd
+
             function postGourmet() {
-                let gourmet = $("#post-title").val();
+                let name = $("#post-title").val();
+                let url = $("#post-comment").val();
                 $.ajax({
                     type: "POST",
-                    url: "/gourmet",
-                    data: {gourmet_give : gourmet},
+                    url: "/post",
+                    data: {name_give : name, url_give : url},
                     success: function (response) { // 성공하면
                         if (response["result"] == "success") {
-                            alert('성공!');
+                            location.reload();
                         }
                     }
                 })
             }
 
-            function showArticles() {
+            function likeGourmet(name){
+                $.ajax({
+                    type: "POST",
+                    url: "/post/like",
+                    data: { 'name_give':name },
+                    success: function (response) {
+                        if (response['result'] == 'success') {
+                            // 2. '좋아요 완료!' 얼럿을 띄웁니다.
+                            // alert('좋아요 완료!')
+                            // 3. 변경된 정보를 반영하기 위해 새로고침합니다.
+                            window.location.reload()
+                        }
+                    }
+                });
+            }
+
+            function deleteGourmet(name){
+                $.ajax({
+                    type: "POST",
+                    url: "/post/delete",
+                    data: { 'name_give':name },
+                    success: function (response) {
+                        if (response['result'] == 'success') {
+                            alert('삭제 완료!');
+                            window.location.reload();
+                        }
+                    }
+                });
+            }
+
+
+            function showGourmet() {
                 $.ajax({
                     type: "GET",
-                    url: "/memo",
+                    url: "/show",
                     data: {},
                     success: function (response) {
-                        if (response["result"] == "success") {
-                            alert(response["msg"]);
+                        let gourmet = response["gourmet"];
+                        for (let i = 0; i< gourmet.length;i++) {
+                            makeCard(gourmet[i]["name"], gourmet[i]["imgurl"], gourmet[i]["like"])
                         }
                     }
                 })
             }
 
-            function makeCard(url, title, desc, comment, image) {
+            function makeCard(name, imgurl, like) {
+                let temp_html = `<div class="card" style="text-align: center">
+                    <img class="card-img-top" src="${imgurl}" alt="Placeholder image">
+                    <div class="card-deck">
+                        <div class="card-body">
+                            <a target="_blank" class="card-title">${name}</a>
+                        </div>
+                    </div>
+                    <div class="card-column">
+                        <div class="card-footer" >
+                            <a href="#" class="card-footer-item has-text-info">
+                                <button type="button" class="btn btn-primary" onclick="likeGourmet('${name}')">좋아요 : ${like}</button>
+                            </a>
+                            <a href="#" class="card-footer-item has-text-info">
+                                <button type="button" class="btn btn-primary" onclick=deleteGourmet('${name}')>삭제</button>
+                            </a>
+                        </div>
 
+                    </div>
+                </div>`
+                                        /*<div class="card">
+                            <p class="card-text comment">좋아요 개수 : ${like}</p>
+                        </div>*/
+
+                 $("#cards-box").append(temp_html);
             }
         </script>
 
@@ -110,6 +166,7 @@
           <div class="jumbotron">
               <nav class="navbar navbar-default navbar-static-top">
                   <div class="container"  style="display: flex; justify-content: flex-end;">
+                      <div class="comment" style="margin: auto">문지캠 맛집리스트</div>
                       <button type="button" class="btn btn-primary" onclick="openClose()" >추가</button>
                   </div>
               </nav>
