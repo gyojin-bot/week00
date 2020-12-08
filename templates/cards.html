@@ -45,12 +45,14 @@
                 padding: 50px;
                 border: black solid;
                 border-radius: 5px;
+
             }
         </style>
         <script>
             $(document).ready(function () {
                 // $("#cards-box").html("");
                 // showArticles();
+                $("#post-box").hide();
             });
 
             function openClose() {
@@ -68,14 +70,15 @@
                 }
             }
             //dddd
-            function postArticle() {
+            function postGourmet() {
+                let gourmet = $("#post-title").val();
                 $.ajax({
                     type: "POST",
-                    url: "/memo",
-                    data: {},
+                    url: "/gourmet",
+                    data: {gourmet_give : gourmet},
                     success: function (response) { // 성공하면
                         if (response["result"] == "success") {
-                            alert(response["msg"]);
+                            alert('성공!');
                         }
                     }
                 })
@@ -102,57 +105,56 @@
     </head>
 
       <body>
-        <div class="wrap">
-            <div class="jumbotron">
-                <div id="post-box" class="form-post">
-                    <h1 class="display-4">나홀로 메모장</h1>
-                    <hr class="my-4">
-                    <p class="lead">
-                    <div>
-                    <label for="post-title"></label>
-                    <input id="post-title" class="form-control" placeholder="메모 제목을 입력하세요">
-                </div>
-                    <div class="form-group">
-                        <label for="post-comment"></label>
-                        <input id="post-comment" class="form-control" placeholder="내용을 입력하세요.">
-                    </div>
-                    <button type="button" class="btn btn-primary" onclick="PostMemo()">저장하기</button>
-                </div>
-            </div>
-            </p>
+      <div class="wrap">
+
+          <div class="jumbotron">
+              <nav class="navbar navbar-default navbar-static-top">
+                  <div class="container"  style="display: flex; justify-content: flex-end;">
+                      <button type="button" class="btn btn-primary" onclick="openClose()" >추가</button>
+                  </div>
+              </nav>
+              <div id="post-box" class="form-post" style="align-items: center">
+                  <h1 class="display-4">Gourmet</h1>
+                  <hr class="my-4">
+                  <p class="lead">
+                  <div>
+                  <label for="post-title"></label>
+                  <input id="post-title" class="form-control" placeholder="맛집 이름을 입력하세요.">
+              </div>
+                  <div class="form-group">
+                      <label for="post-comment"></label>
+                      <input id="post-comment" class="form-control" placeholder="맛집 링크를 입력하세요.">
+                  </div>
+                  <button type="button" class="btn btn-primary" onclick="postGourmet()">저장하기</button>
+              </div>
+          </div>
 
             <div id="cards-box" class="card-columns">
-                <div class="card">
-                         <img class="card-img-top" src="https://cdn.emojidex.com/emoji/seal/%EF%BC%9F.png?1417137872" alt="Placeholder image">
+                <div class="card" style="text-align: center">
+                    <img class="card-img-top" src="https://cdn.emojidex.com/emoji/seal/%EF%BC%9F.png?1417137872" alt="Placeholder image">
 
-                         <div class="card-deck">
-                         <div class="card-body">
-                         <a target="_blank" class="card-title">${name}</a>
-                         </div>
-                         </div>
+                    <div class="card-deck">
+                        <div class="card-body">
+                            <a target="_blank" class="card-title">가게 이름</a>
+                        </div>
+                    </div>
+                    <div class="card-column">
 
-                         <div class="card-column">
-
-                         <div class="card-deck">
-                         <div class="card">
-                         <p class="card-text">${birthday}</p>
-                         </div>
-                         <div class="card">
-                         <p class="card-text">${hobbies}</p>
-                         </div>
-                         </div>
-
-                         </div>
-
-                         <div class="card-deck" >
-                         <div class="card">
-                         <p class="card-text comment">${catchphrase}</p>
-                         </div>
-                         </div>
-
-                         </div>
-                     </div>
+                        <div class="card-footer" >
+                            <a href="#" class="card-footer-item has-text-info">
+                                <button type="button" class="btn btn-primary" onclick=alert('좋아요!')>좋아요!</button>
+                            </a>
+                            <a href="#" class="card-footer-item has-text-info">
+                                <button type="button" class="btn btn-primary" onclick=alert('삭제!')>삭제!</button>
+                            </a>
+                        </div>
+                        <div class="card">
+                            <p class="card-text comment">좋아요 개수 : 0</p>
+                        </div>
+                    </div>
+                </div>
             </div>
+        </div>
         </div>
     </body>
 
