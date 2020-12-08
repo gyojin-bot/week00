@@ -123,18 +123,35 @@
 
             <div id="cards-box" class="card-columns">
                 <div class="card">
-                    <div class="card-body">
-                        <a class="card-title">제목</a>
-                        <p class="card-text">내용</p>
-                        <p class="form-group">
-                            <label for="post-comment"></label>
-                            <div class="form-control" rows="2">
-                                <button type="button" class="btn btn-primary" onclick="PostMemo()">수정</button>
-                                <button type="button" class="btn btn-primary" onclick="PostMemo()">삭제</button>
-                            </div>
-                        </p>
-                    </div>
-                </div>
+                         <img class="card-img-top" src="https://cdn.emojidex.com/emoji/seal/%EF%BC%9F.png?1417137872" alt="Placeholder image">
+
+                         <div class="card-deck">
+                         <div class="card-body">
+                         <a target="_blank" class="card-title">${name}</a>
+                         </div>
+                         </div>
+
+                         <div class="card-column">
+
+                         <div class="card-deck">
+                         <div class="card">
+                         <p class="card-text">${birthday}</p>
+                         </div>
+                         <div class="card">
+                         <p class="card-text">${hobbies}</p>
+                         </div>
+                         </div>
+
+                         </div>
+
+                         <div class="card-deck" >
+                         <div class="card">
+                         <p class="card-text comment">${catchphrase}</p>
+                         </div>
+                         </div>
+
+                         </div>
+                     </div>
             </div>
         </div>
     </body>
