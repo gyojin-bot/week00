@@ -78,11 +78,24 @@ def card():
                                template_name=session['user'])
     return redirect(url_for('home'))
 
-
-@app.route('/show', methods=['GET'])
-def show_gourmet():
+@app.route('/showAll', methods=['GET'])
+def show_gourmet_all():
     result = list(db.gourmet.find({}, {'_id': 0}))
     return jsonify({'result': 'success', 'gourmet': result})
+
+
+@app.route('/showSelected', methods=['POST'])
+def show_gourmet_selected():
+    menu_receive = request.form['menu_give']
+    result = list(db.gourmet.find({'menu':menu_receive}, {'_id': 0}))
+    print(result)
+    return jsonify({'result': 'success', 'gourmet': result})
+
+
+# @app.route('/show', methods=['GET'])
+# def show_gourmet():
+#     result = list(db.gourmet.find({}, {'_id': 0}))
+#     return jsonify({'result': 'success', 'gourmet': result})
 
 
 @app.route('/post/like', methods=['POST'])
@@ -108,6 +121,7 @@ def post_gourmet():
     # 1. 클라이언트로부터 데이터를 받기
     name_receive = request.form['name_give']  # 클라이언트로부터 이름을 받는 부분
     url_receive = request.form['url_give']  # 클라이언트로부터 url을 받는 부분
+    menu_receive = request.form['menu_give']  # 클라이언트로부터 menu을 받는 부분
 
     # 3. mongoDB에 데이터를 넣기
 
@@ -128,7 +142,9 @@ def post_gourmet():
     gourmet = {
         'name': name_receive,
         'imgurl': imgurl,
-        'like': 0
+        'menu': menu_receive,
+        'like': 0,
+        'url': url_receive
     }
 
     db.gourmet.insert_one(gourmet)
