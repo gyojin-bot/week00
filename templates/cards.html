@@ -51,9 +51,10 @@
         .nav-item {
             display: flex;
         }
+
     </style>
     <script>
-                $(document).ready(function () {
+        $(document).ready(function () {
             $("#cards-box").html("");
             showGourmet();
             $("#post-box").hide();
@@ -73,70 +74,70 @@
                 // 다시 버튼을 클릭하면, 박스 닫기를 할 수 있게 텍스트 바꿔두기
                 $("#btn-post-box").text("포스팅 박스 닫기");
             }
+        }
 
-
-            function postGourmet() {
-                let name = $("#post-title").val();
-                let url = $("#post-comment").val();
-                $.ajax({
-                    type: "POST",
-                    url: "/post",
-                    data: {name_give: name, url_give: url},
-                    success: function (response) { // 성공하면
-                        if (response["result"] == "success") {
-                            location.reload();
-                        }
+        function postGourmet() {
+            let name = $("#post-title").val();
+            let url = $("#post-comment").val();
+            $.ajax({
+                type: "POST",
+                url: "/post",
+                data: {name_give: name, url_give: url},
+                success: function (response) { // 성공하면
+                    if (response["result"] == "success") {
+                        location.reload();
                     }
-                })
-            }
+                }
+            })
+        }
 
-            function likeGourmet(name) {
-                $.ajax({
-                    type: "POST",
-                    url: "/post/like",
-                    data: {'name_give': name},
-                    success: function (response) {
-                        if (response['result'] == 'success') {
-                            // 2. '좋아요 완료!' 얼럿을 띄웁니다.
-                            // alert('좋아요 완료!')
-                            // 3. 변경된 정보를 반영하기 위해 새로고침합니다.
-                            window.location.reload()
-                        }
+        function likeGourmet(name) {
+            $.ajax({
+                type: "POST",
+                url: "/post/like",
+                data: {'name_give': name},
+                success: function (response) {
+                    if (response['result'] == 'success') {
+                        // 2. '좋아요 완료!' 얼럿을 띄웁니다.
+                        // alert('좋아요 완료!')
+                        // 3. 변경된 정보를 반영하기 위해 새로고침합니다.
+                        window.location.reload()
                     }
-                });
-            }
+                }
+            });
+        }
 
-            function deleteGourmet(name) {
-                $.ajax({
-                    type: "POST",
-                    url: "/post/delete",
-                    data: {'name_give': name},
-                    success: function (response) {
-                        if (response['result'] == 'success') {
-                            alert('삭제 완료!');
-                            window.location.reload();
-                        }
+        function deleteGourmet(name) {
+            $.ajax({
+                type: "POST",
+                url: "/post/delete",
+                data: {'name_give': name},
+                success: function (response) {
+                    if (response['result'] == 'success') {
+                        alert('삭제 완료!');
+                        window.location.reload();
                     }
-                });
-            }
+                }
+            });
+        }
 
 
-            function showGourmet() {
-                $.ajax({
-                    type: "GET",
-                    url: "/show",
-                    data: {},
-                    success: function (response) {
-                        let gourmet = response["gourmet"];
-                        for (let i = 0; i < gourmet.length; i++) {
-                            makeCard(gourmet[i]["name"], gourmet[i]["imgurl"], gourmet[i]["like"])
-                        }
+        function showGourmet() {
+            $.ajax({
+                type: "GET",
+                url: "/show",
+                data: {},
+                success: function (response) {
+                    let gourmet = response["gourmet"];
+                    for (let i = 0; i < gourmet.length; i++) {
+                        makeCard(gourmet[i]["name"], gourmet[i]["imgurl"], gourmet[i]["like"])
                     }
-                })
-            }
+                }
+            })
+        }
 
-            function makeCard(name, imgurl, like) {
-                let temp_html = `<div class="card" style="text-align: center">
+        function makeCard(name, imgurl, like) {
+            let temp_html = `<div class="card" style="text-align: center">
                     <img class="card-img-top" src="${imgurl}" alt="Placeholder image">
                     <div class="card-deck">
                         <div class="card-body">
@@ -156,118 +157,8 @@
                     </div>
                 </div>`
 
-                $("#cards-box").append(temp_html);
-            }
+            $("#cards-box").append(temp_html);
         }
-//         $(document).ready(function () {
-//             $("#cards-box").html("");
-//             showGourmet();
-//             $("#post-box").hide();
-//         });
-
-
-//         function openClose() {
-//             // id 값 post-box의 display 값이 block 이면(= 눈에 보이면)
-//             if ($("#post-box").css("display") == "block") {
-//                 // post-box를 가리고
-//                 $("#post-box").hide();
-//                 // 다시 버튼을 클릭하면, 박스 열기를 할 수 있게 텍스트 바꿔두기
-//                 $("#btn-post-box").text("포스팅 박스 열기");
-//             } else {
-//                 // 아니면(눈에 보이지 않으면) post-box를 펴라
-//                 $("#post-box").show();
-//                 // 다시 버튼을 클릭하면, 박스 닫기를 할 수 있게 텍스트 바꿔두기
-//                 $("#btn-post-box").text("포스팅 박스 닫기");
-//             }
-//         }
-
-//         function postGourmet() {
-//             let name = $("#post-title").val();
-//             let url = $("#post-comment").val();
-//             $.ajax({
-//                 type: "POST",
-//                 url: "/post",
-//                 data: {name_give: name, url_give: url},
-//                 success: function (response) { // 성공하면
-//                     if (response["result"] == "success") {
-//                         location.reload();
-//                     }
-//                 }
-//             })
-//         }
-
-//         function likeGourmet(name) {
-//             $.ajax({
-//                 type: "POST",
-//                 url: "/post/like",
-//                 data: {'name_give': name},
-//                 success: function (response) {
-//                     if (response['result'] == 'success') {
-//                         // 2. '좋아요 완료!' 얼럿을 띄웁니다.
-//                         // alert('좋아요 완료!')
-//                         // 3. 변경된 정보를 반영하기 위해 새로고침합니다.
-//                         window.location.reload()
-//                     }
-//                 }
-//             });
-//         }
-
-//         function deleteGourmet(name) {
-//             $.ajax({
-//                 type: "POST",
-//                 url: "/post/delete",
-//                 data: {'name_give': name},
-//                 success: function (response) {
-//                     if (response['result'] == 'success') {
-//                         alert('삭제 완료!');
-//                         window.location.reload();
-//                     }
-//                 }
-//             });
-//         }
-
-
-//         function showGourmet() {
-//             $.ajax({
-//                 type: "GET",
-//                 url: "/show",
-//                 data: {},
-//                 success: function (response) {
-//                     let gourmet = response["gourmet"];
-//                     for (let i = 0; i < gourmet.length; i++) {
-//                         makeCard(gourmet[i]["name"], gourmet[i]["imgurl"], gourmet[i]["like"])
-//                     }
-//                 }
-//             })
-//         }
-
-//         function makeCard(name, imgurl, like) {
-//             let temp_html = `<div class="card" style="text-align: center">
-//                     <img class="card-img-top" src="${imgurl}" alt="Placeholder image">
-//                     <div class="card-deck">
-//                         <div class="card-body">
-//                             <a target="_blank" class="card-title">${name}</a>
-//                         </div>
-//                     </div>
-//                     <div class="card-column">
-//                         <div class="card-footer" >
-//                             <a href="#" class="card-footer-item has-text-info">
-//                                 <button type="button" class="btn btn-primary" onclick="likeGourmet('${name}')">좋아요 : ${like}</button>
-//                             </a>
-//                             <a href="#" class="card-footer-item has-text-info">
-//                                 <button type="button" class="btn btn-primary" onclick=deleteGourmet('${name}')>삭제</button>
-//                             </a>
-//                         </div>
-
-//                     </div>
-//                 </div>`
-
-//             /*<div class="card">
-// <p class="card-text comment">좋아요 개수 : ${like}</p>
-// </div>*/
-
-//             $("#cards-box").append(temp_html);
-//         }
 
     </script>
 
@@ -282,7 +173,7 @@
     <a class="navbar-brand" href="{{ url_for('card') }}">메인페이지</a>
     <div class="collapse navbar-collapse flex-grow-0" id="navbarNav">
         <ul class="navbar-nav">
-            <li class="nav-item ">
+            <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('logout') }}">로그아웃</a>
             </li>
             <li class="nav-text active">
