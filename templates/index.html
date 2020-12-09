@@ -33,6 +33,11 @@
             text-align: center;
         }
 
+        .index-input {
+            width: 50%;
+            margin: auto;
+        }
+
         .div-btn {
             margin-top: 0.5rem;
         }
@@ -53,8 +58,7 @@
                     if (response["result"] == "success") {
                         alert("로그인 완료!");
                         window.location.href = "http://localhost:5000/card";
-                    }
-                    else {
+                    } else {
                         alert("로그인 실패!");
                         window.location.reload();
                     }
@@ -62,26 +66,27 @@
             })
         }
 
-
         function register() {
             let id = $("#create-id").val();
             let pw = $("#create-pw").val();
             let pw2 = $("#check-pw").val();
 
-            $.ajax({
-                type: "POST",
-                url: "/register",
-                data: {'id_give': id, 'pw_give': pw, 'pw2_give': pw2},
-                success: function (response) { // 성공하면
-                    if (response["result"] == "success") {
-                        alert("회원가입 완료!");
-                        window.location.reload();
-                    }
-                    else {
-                        alert("입력 정보를 확인하세요")
-                    }
-                }
-            })
+            id.length === 0 && pw.length === 0 ?
+                alert('ID와 비밀번호를 입력해주세요') :
+                pw != pw2 ? alert('비밀번호가 서로 다릅니다. 다시 입력해주세요') :
+                    $.ajax({
+                        type: "POST",
+                        url: "/register",
+                        data: {'id_give': id, 'pw_give': pw, 'pw2_give': pw2},
+                        success: function (response) { // 성공하면
+                            if (response["result"] == "success") {
+                                alert("회원가입 완료!");
+                                window.location.reload();
+                            } else {
+                                alert("이미 존재하는 ID입니다. 다른 ID를 사용해주세요.")
+                            }
+                        }
+                    })
         }
 
     </script>
@@ -93,18 +98,22 @@
     <div id="post-box" class="form-post">
         <h1 class="display-4">WEEK 00</h1>
         <div class="index-input">
-            <label for="input-id">ID
-                <input id="input-id" class="form-control" placeholder="아이디를 입력해주세요.">
-            </label>
-        </div>
-        <div class="index-input">
-            <label for="input-pw">PW
-                <input id="input-pw" class="form-control" placeholder="비밀번호를 입력해주세요.">
-            </label>
-        </div>
-        <div class="div-btn">
-            <button onclick="login()" type="button" class="btn btn-primary">로그인</button>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">회원가입</button>
+            <div>
+                <label for="input-id">ID
+                    <input id="input-id" class="form-control" placeholder="아이디를 입력해주세요.">
+                </label>
+            </div>
+            <div>
+                <label for="input-pw">PW
+                    <input type="password" id="input-pw" class="form-control" placeholder="비밀번호를 입력해주세요.">
+                </label>
+            </div>
+
+            <div class="div-btn">
+                <button onclick="login()" type="button" class="btn btn-primary">로그인</button>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">회원가입
+                </button>
+            </div>
         </div>
     </div>
 </div>
@@ -125,14 +134,15 @@
                 <label for="create-id">ID</label>
                 <input id="create-id" class="form-control" placeholder="아이디를 입력해주세요.">
                 <label for="create-pw">PW</label>
-                <input id="create-pw" class="form-control" placeholder="비밀번호를 입력해주세요.">
+                <input type="password" id="create-pw" class="form-control" placeholder="비밀번호를 입력해주세요.">
                 <label for="check-pw">PW</label>
-                <input id="check-pw" class="form-control" placeholder="비밀번호를 다시 입력해주세요.">
+                <input type="password" id="check-pw" class="form-control" placeholder="비밀번호를 다시 입력해주세요.">
             </div>
 
             <!-- Modal footer -->
             <div class="modal-footer">
-                <button onclick="register()" type="button" class="btn btn-danger" data-dismiss="modal">완료</button>
+                <button onclick="register()" type="button" class="btn btn-danger"
+                ">완료</button>
                 <button type="button" class="btn btn-danger" data-dismiss="modal">닫기</button>
             </div>
         </div>
