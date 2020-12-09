@@ -14,19 +14,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-    <!--    &lt;!&ndash; Bootstrap CSS &ndash;&gt;-->
-    <!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"-->
-    <!--          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"-->
-    <!--          crossorigin="anonymous">-->
-    <!--    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>-->
-    <!--    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>-->
-
-    <!--    &lt;!&ndash; JS &ndash;&gt;-->
-    <!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>-->
-    <!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>-->
-    <!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"-->
-    <!--            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"-->
-    <!--            crossorigin="anonymous"></script>-->
+<!--    font awesome-->
+    <<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
 
     <!-- Sweetalert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
@@ -64,7 +53,6 @@
         #nav-wrap {
             display: flex;
             height: 50px;
-        }
 
         #post-box {
             width: 500px;
@@ -255,19 +243,21 @@
                     </a>
                     <div class="card-deck">
                         <div class="card-body">
-                            <a target="_blank" class="card-title">${name}</a>
+                            <h5 class="card-title">${name}</h5>
+    <p class="card-text">${menu}</p>
+
                         </div>
                     </div>
-                        <div class="card-body">
-                            <a target="_blank" class="card-title">${menu}</a>
-                        </div>
+
                     <div class="card-column">
                         <div class="card-footer" >
                             <a href="#" class="card-footer-item has-text-info">
-                                <button type="button" class="btn btn-primary" onclick="likeGourmet('${name}')">좋아요 : ${like}</button>
+                                <button type="button" class="btn btn-primary"  onclick="likeGourmet('${name}')"><span class="icon">
+              <i class="fas fa-thumbs-up"></i>
+            </span>좋아요 : ${like}</button>
                             </a>
                             <a href="#" class="card-footer-item has-text-info">
-                                <button type="button" class="btn btn-primary" onclick=deleteGourmet('${name}')>삭제</button>
+                                <button type="button" class="btn btn-warning" onclick=deleteGourmet('${name}')>삭제</button>
                             </a>
                         </div>
                     </div>

@@ -78,6 +78,7 @@ def card():
                                template_name=session['user'])
     return redirect(url_for('home'))
 
+
 @app.route('/showAll', methods=['GET'])
 def show_gourmet_all():
     result = list(db.gourmet.find({}, {'_id': 0}))
@@ -89,12 +90,6 @@ def show_gourmet_selected():
     menu_receive = request.form['menu_give']
     result = list(db.gourmet.find({'menu':menu_receive}, {'_id': 0}))
     return jsonify({'result': 'success', 'gourmet': result})
-
-
-# @app.route('/show', methods=['GET'])
-# def show_gourmet():
-#     result = list(db.gourmet.find({}, {'_id': 0}))
-#     return jsonify({'result': 'success', 'gourmet': result})
 
 
 @app.route('/post/like', methods=['POST'])
