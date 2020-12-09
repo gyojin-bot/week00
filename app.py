@@ -50,21 +50,27 @@ def login():
     pw_receive = request.form['pw_give']
 
     user = db.users.find_one({'id': id_receive})
-    user_pw = user['pw']
-    print('check id/pw')
-    print(id_receive, pw_receive)
-    print(user['pw'])
-    check_pw = bcrypt.check_password_hash(user_pw, pw_receive)
 
-    if user is not None and check_pw is True:
-        # 유저가 db에 있을 경우
-        session['user'] = id_receive
-        # print(session)
-        # print("확인")
+    if user is not None:
+        user_pw = user['pw']
+        check_pw = bcrypt.check_password_hash(user_pw, pw_receive)
 
-        return jsonify({'result': 'success'})
+        if check_pw is True:
+            session['user'] = id_receive
+            return jsonify({'result': 'success'})
+        else:
+            return jsonify({'result': 'fail'})
     else:
         return jsonify({'result': 'fail'})
+
+    # if user is not None and check_pw is True:
+    #     # 유저가 db에 있을 경우
+    #     session['user'] = id_receive
+    #     # print(session)
+    #     # print("확인")
+    #     return jsonify({'result': 'success'})
+    # else:
+    #     return jsonify({'result': 'fail'})
 
 
 @app.route('/logout')
