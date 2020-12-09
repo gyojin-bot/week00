@@ -26,11 +26,17 @@ def register():
     if request.method == 'POST':
         id_receive = request.form['id_give']
         pw_receive = request.form['pw_give']
+        pw2_receive = request.form['pw2_give']
 
-        new_user = {'id': id_receive, 'pw': pw_receive}
-        # print(new_user)
-        db.users.insert_one(new_user)
-        return jsonify({'result': 'success'})
+        user = db.users.find_one({'id': id_receive})
+
+        if user is not None or pw_receive != pw2_receive:
+            return jsonify({'result': 'fail'})
+        else:
+            new_user = {'id': id_receive, 'pw': pw_receive}
+            # print(new_user)
+            db.users.insert_one(new_user)
+            return jsonify({'result': 'success'})
 
 
 @app.route('/login', methods=['POST'])
@@ -38,20 +44,26 @@ def login():
     id_receive = request.form['id_give']
     pw_receive = request.form['pw_give']
     user = db.users.find_one({'id': id_receive}, {'pw': pw_receive})
-    print(user)
+    # print(user)
     if user is not None:
+        # 유저가 db에 있을 경우
         session['user'] = id_receive
-        print(session)
+        # print(session)
         # print("확인")
         return jsonify({'result': 'success'})
     else:
-        print("실패")
-        return redirect(url_for('home'))
+        return jsonify({'result': 'fail'})
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('home'))
 
 
 @app.route('/card')
 def card():
     if 'user' in session:
+        # 로그인 상태가 아닐 경우 (세션에 user가 없을 경우)
         return render_template('cards.html')
     return redirect(url_for('home'))
 

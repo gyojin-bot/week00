@@ -66,15 +66,19 @@
         function register() {
             let id = $("#create-id").val();
             let pw = $("#create-pw").val();
+            let pw2 = $("#check-pw").val();
 
             $.ajax({
                 type: "POST",
                 url: "/register",
-                data: {'id_give': id, 'pw_give': pw},
+                data: {'id_give': id, 'pw_give': pw, 'pw2_give': pw2},
                 success: function (response) { // 성공하면
                     if (response["result"] == "success") {
                         alert("회원가입 완료!");
                         window.location.reload();
+                    }
+                    else {
+                        alert("입력 정보를 확인하세요")
                     }
                 }
             })
