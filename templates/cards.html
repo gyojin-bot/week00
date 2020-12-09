@@ -30,7 +30,7 @@
         }
 
         .wrap {
-            width: 900px;
+            width: 50%;
             margin: auto;
         }
 
@@ -152,12 +152,12 @@
                     </div>
                 </div>`
 
-                /*<div class="card">
-    <p class="card-text comment">좋아요 개수 : ${like}</p>
-    </div>*/
+            /*<div class="card">
+<p class="card-text comment">좋아요 개수 : ${like}</p>
+</div>*/
 
-                $("#cards-box").append(temp_html);
-            }
+            $("#cards-box").append(temp_html);
+        }
 
     </script>
 
@@ -165,11 +165,16 @@
 
 <body>
 
+<!--{ % include "navbar.html" % }-->
 <!-- 네비게이션바 -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+<nav class="navbar navbar-expand-sm navbar-light bg-light border-bottom">
+
+    <a href="#" id="toggle" class="Toggle Navbar-toggle" data-toggle="collapse"
+       data-target="#navbarCollapse"><span></span></a>
+
     <a class="navbar-brand" href="{{ url_for('card') }}">메인페이지</a>
     <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav"
-        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse flex-grow-0" id="navbarNav">
@@ -186,7 +191,7 @@
     <div class="jumbotron">
         <nav class="navbar navbar-default navbar-static-top">
             <div class="container" style="display: flex; justify-content: flex-end;">
-                <div class="comment" style="margin: auto">문지캠 맛집리스트</div>
+                <div class="comment" style="margin: auto">문지캠퍼스 맛집리스트</div>
                 <button type="button" class="btn btn-primary" onclick="openClose()">추가</button>
             </div>
         </nav>
