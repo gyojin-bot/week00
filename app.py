@@ -51,18 +51,12 @@ def login():
 
     user = db.users.find_one({'id': id_receive})
 
-    # print('check id/pw')
-    # print(id_receive, pw_receive)
-    # print(user['pw'])
-
     if user is not None:
         user_pw = user['pw']
         check_pw = bcrypt.check_password_hash(user_pw, pw_receive)
-        print(user['pw'])
+
         if check_pw is True:
             session['user'] = id_receive
-        # print(session)
-            print("확인")
             return jsonify({'result': 'success'})
         else:
             return jsonify({'result': 'fail'})
@@ -72,7 +66,7 @@ def login():
 
 @app.route('/logout')
 def logout():
-    session.clear()
+    session.pop('user')
     return redirect(url_for('home'))
 
 
