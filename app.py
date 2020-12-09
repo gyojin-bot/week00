@@ -2,6 +2,7 @@ from datetime import timedelta
 
 from bs4 import BeautifulSoup
 from flask import Flask, request, render_template, session, jsonify, redirect, url_for
+from flask_bcrypt import Bcrypt
 from pip._vendor import requests
 from pymongo import MongoClient
 
@@ -9,6 +10,7 @@ client = MongoClient('localhost', 27017)
 db = client.users
 
 app = Flask(__name__)
+bcrypt = Bcrypt(app)
 app.secret_key = 'asdfgh123'
 
 
@@ -35,7 +37,8 @@ def register():
         if user is not None or pw_receive != pw2_receive:
             return jsonify({'result': 'fail'})
         else:
-            new_user = {'id': id_receive, 'pw': pw_receive}
+            pw_hash = bcrypt.generate_password_hash(pw_receive)
+            new_user = {'id': id_receive, 'pw': pw_hash}
             # print(new_user)
             db.users.insert_one(new_user)
             return jsonify({'result': 'success'})
@@ -45,13 +48,20 @@ def register():
 def login():
     id_receive = request.form['id_give']
     pw_receive = request.form['pw_give']
-    user = db.users.find_one({'id': id_receive})
 
-    if user is not None and pw_receive == user['pw']:
+    user = db.users.find_one({'id': id_receive})
+    user_pw = user['pw']
+    print('check id/pw')
+    print(id_receive, pw_receive)
+    print(user['pw'])
+    check_pw = bcrypt.check_password_hash(user_pw, pw_receive)
+
+    if user is not None and check_pw is True:
         # 유저가 db에 있을 경우
         session['user'] = id_receive
         # print(session)
         # print("확인")
+
         return jsonify({'result': 'success'})
     else:
         return jsonify({'result': 'fail'})
