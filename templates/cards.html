@@ -1,525 +1,374 @@
 <!Doctype html>
 <html lang="ko">
 
-    <head>
-        <!-- Required meta tags -->
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+<!--    font awesome-->
+    <<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
 
     <!-- JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-        <!-- 구글폰트 -->
-        <link href="https://fonts.googleapis.com/css?family=Stylish&display=swap" rel="stylesheet">
-
-
-        <title>SW사관학교 정글 | 나홀로 메모장</title>
-
-        <!-- style -->
-        <style type="text/css">
-            * {
-                font-family: "Stylish", sans-serif;
-            }
-
-            .wrap {
-                width: 900px;
-                margin: auto;
-            }
-
-            .comment {
-                color: blue;
-                font-weight: bold;
-            }
-
-            #post-box {
-                width: 500px;
-                margin: 20px auto;
-                padding: 50px;
-                border: black solid;
-                border-radius: 5px;
-
-            }
-        </style>
-        <script>
-            $(document).ready(function () {
-                //window.location.reload()
-                $("#cards-box").html("");
-                make_list();
-               // showGourmet('ALL');
-                $("#post-box").hide();
-            });
-
-            function openClose() {
-                // id 값 post-box의 display 값이 block 이면(= 눈에 보이면)
-                if ($("#post-box").css("display") == "block") {
-                    // post-box를 가리고
-                    $("#post-box").hide();
-                    // 다시 버튼을 클릭하면, 박스 열기를 할 수 있게 텍스트 바꿔두기
-                    $("#btn-post-box").text("포스팅 박스 열기");
-                } else {
-                    // 아니면(눈에 보이지 않으면) post-box를 펴라
-                    $("#post-box").show();
-                    // 다시 버튼을 클릭하면, 박스 닫기를 할 수 있게 텍스트 바꿔두기
-                    $("#btn-post-box").text("포스팅 박스 닫기");
-                }
-            }
-
-
-            let list=['ALL','한식','중식', '일식', '이탈리안', '카페·베이커리','배달'];
-            function make_list() {
-                for(let i =0;i<list.length;i++) {
-                    let type = list[i];
-                    // let tmp= `<a class="dropdown-item" onclick="showVillagers_per(per[${i}])">${list[i]}</a>`;
-                    let tmp= `<button type="button"  class="dropdown-item" onclick=choose_menu(list[${i}])>${type}</button>`;
-                    $("#menu").append(tmp);
-
-                    let tmp2= `<li class="breadcrumb-item"><a href="#" onclick="showGourmet(list[${i}])">${type}</a></li>`;
-                    $("#menu2").append(tmp2);
-                }
-
-            }
-
-            function choose_menu(menu) {
-                $('#dropdownMenuButton').text(menu);
-            }
-            function postGourmet() {
-                let name = $("#post-title").val();
-                let url = $("#post-comment").val();
-                let menu = $('#dropdownMenuButton').text();
-                $.ajax({
-                    type: "POST",
-                    url: "/post",
-                    data: {name_give : name, url_give : url, menu_give : menu},
-                    success: function (response) { // 성공하면
-                        if (response["result"] == "success") {
-                            location.reload();
-                        }
-                    }
-                })
-            }
-
-
-            function likeGourmet(name){
-                $.ajax({
-                    type: "POST",
-                    url: "/post/like",
-                    data: { 'name_give':name },
-                    success: function (response) {
-                        if (response['result'] == 'success') {
-                            // 2. '좋아요 완료!' 얼럿을 띄웁니다.
-                            // alert('좋아요 완료!')
-                            // 3. 변경된 정보를 반영하기 위해 새로고침합니다.
-                            window.location.reload()
-                        }
-                    }
-                });
-            }
-
-            function deleteGourmet(name){
-                $.ajax({
-                    type: "POST",
-                    url: "/post/delete",
-                    data: { 'name_give':name },
-                    success: function (response) {
-                        if (response['result'] == 'success') {
-                            alert('삭제 완료!');
-                            window.location.reload();
-                        }
-                    }
-                });
-            }
-
-
-            function showGourmet(menu) {
-
-                $("#cards-box").html("");
-                if(menu === 'ALL')  {
-                    $.ajax({
-                        type: "GET",
-                        url: "/showAll",
-                        data: {},
-                        success: function (response) {
-                            let gourmet = response["gourmet"];
-                            for (let i = 0; i< gourmet.length;i++) {
-                                makeCard(gourmet[i]["name"], gourmet[i]["imgurl"], gourmet[i]["menu"], gourmet[i]["like"])
-                            }
-                        }
-                    })
-                }
-                else{
-                    $.ajax({
-                        type: "POST",
-                        url: "/showSelected",
-                        data: {'menu_give':menu},
-                        success: function (response) {
-                            let gourmet = response["gourmet"]
-                            for (let i = 0; i< gourmet.length;i++) {
-                                makeCard(gourmet[i]["name"], gourmet[i]["imgurl"], gourmet[i]["menu"], gourmet[i]["like"])
-                            }
-                        }
-                    })
-                }
-
-            }
-            // function showGourmet() {
-            //     $.ajax({
-            //         type: "GET",
-            //         url: "/show",
-            //         data: {},
-            //         success: function (response) {
-            //             let gourmet = response["gourmet"];
-            //             for (let i = 0; i< gourmet.length;i++) {
-            //                 makeCard(gourmet[i]["name"], gourmet[i]["imgurl"], gourmet[i]["menu"], gourmet[i]["like"])
-            //             }
-            //         }
-            //     })
-            // }
-
-            function makeCard(name, imgurl, menu, like) {
-                let temp_html = `<div class="card" style="text-align: center">
-                    <img class="card-img-top" src="${imgurl}" alt="Placeholder image">
-                    <div class="card-deck">
-                        <div class="card-body">
-                            <a target="_blank" class="card-title">${name}</a>
-                        </div>
-                    </div>
-                        <div class="card-body">
-                            <a target="_blank" class="card-title">${menu}</a>
-                        </div>
-                    <div class="card-column">
-                        <div class="card-footer" >
-                            <a href="#" class="card-footer-item has-text-info">
-                                <button type="button" class="btn btn-primary" onclick="likeGourmet('${name}')">좋아요 : ${like}</button>
-                            </a>
-                            <a href="#" class="card-footer-item has-text-info">
-                                <button type="button" class="btn btn-primary" onclick=deleteGourmet('${name}')>삭제</button>
-                            </a>
-                        </div>
-                    </div>
-                </div>`
-                                        /*<div class="card">
-                            <p class="card-text comment">좋아요 개수 : ${like}</p>
-                        </div>*/
-
-                 $("#cards-box").append(temp_html);
-            }
-        </script>
-
-    </head>
-
-      <body>
-      <div class="wrap">
-
-          <div class="jumbotron">
-              <nav class="navbar navbar-default navbar-static-top">
-                  <div class="container"  style="display: flex; justify-content: flex-end;">
-                      <div class="comment" style="margin: auto">문지캠 맛집리스트</div>
-                      <button type="button" class="btn btn-primary" onclick="openClose()" >추가</button>
-                  </div>
-              </nav>
-              <div id="post-box" class="form-post" style="align-items: center">
-                  <h1 class="display-4">Gourmet</h1>
-                  <hr class="my-4">
-                  <p class="lead">
-                  <div>
-                  <label for="post-title"></label>
-                  <input id="post-title" class="form-control" placeholder="맛집 이름을 입력하세요.">
-              </div>
-                  <div class="form-group">
-                      <label for="post-comment"></label>
-                      <input id="post-comment" class="form-control" placeholder="맛집 링크를 입력하세요.">
-                  </div>
-                  <div class="dropdown">
-                      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          선택
-                      </button>
-                      <div class="dropdown-menu" id="menu" aria-labelledby="dropdownMenuButton">
-                      </div>
-                  <button type="button" class="btn btn-primary" onclick="postGourmet()">저장하기</button>
-                  </div>
-              </div>
-          </div>
-          <nav aria-label="breadcrumb">
-
-              <nav aria-label="breadcrumb">
-                  <ol class="breadcrumb" id="menu2">
-                  </ol>
-              </nav>
-
-            <div id="cards-box" class="card-columns">
-                <div class="card" style="text-align: center">
-                    <img class="card-img-top" src="https://cdn.emojidex.com/emoji/seal/%EF%BC%9F.png?1417137872" alt="Placeholder image">
-
-                    <div class="card-deck">
-                        <div class="card-body">
-                            <a target="_blank" class="card-title">가게 이름</a>
-                        </div>
-                    </div>
-                    <div class="card-column">
-
-                        <div class="card-footer" >
-                            <a href="#" class="card-footer-item has-text-info">
-                                <button type="button" class="btn btn-primary" onclick=alert('좋아요!')>좋아요!</button>
-                            </a>
-                            <a href="#" class="card-footer-item has-text-info">
-                                <button type="button" class="btn btn-primary" onclick=alert('삭제!')>삭제!</button>
-                            </a>
-
-                        </div>
-                        <div class="card">
-                            <p class="card-text comment">좋아요 개수 : 0</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        </div>
-    </body>
-
-</html>
-
-<!--<!Doctype html>-->
-<!--<html lang="ko">-->
-
-<!--<head>-->
-<!--    &lt;!&ndash; Required meta tags &ndash;&gt;-->
-<!--    <meta charset="utf-8">-->
-<!--    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">-->
 
 <!--    &lt;!&ndash; Bootstrap CSS &ndash;&gt;-->
 <!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"-->
 <!--          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"-->
 <!--          crossorigin="anonymous">-->
+<!--    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>-->
+<!--    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>-->
 
 <!--    &lt;!&ndash; JS &ndash;&gt;-->
 <!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>-->
+<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>-->
 <!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"-->
 <!--            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"-->
 <!--            crossorigin="anonymous"></script>-->
 
-<!--    &lt;!&ndash; 구글폰트 &ndash;&gt;-->
-<!--    <link href="https://fonts.googleapis.com/css?family=Stylish&display=swap" rel="stylesheet">-->
+    <!-- Sweetalert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    <!-- 구글폰트 -->
+    <link href="https://fonts.googleapis.com/css?family=Stylish&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
 
 
-<!--    <title>WEEK 00</title>-->
+    <title>ㅇㅇㅇㅇㅇ</title>
 
-<!--    &lt;!&ndash; style &ndash;&gt;-->
-<!--    <style type="text/css">-->
-<!--        * {-->
-<!--            font-family: "Stylish", sans-serif;-->
-<!--        }-->
+    <!-- style -->
+    <style type="text/css">
+        * {
+            font-family: 'Jua', sans-serif;
+        }
 
-<!--        .wrap {-->
-<!--            width: 900px;-->
-<!--            margin: auto;-->
-<!--        }-->
+        .wrap {
+            width: 70%;
+            margin: auto;
+        }
 
-<!--        .comment {-->
-<!--            color: blue;-->
-<!--            font-weight: bold;-->
-<!--        }-->
+        .comment {
+            color: darkcyan;
+            font-weight: normal;
+            font-size: 80px;
+        }
 
-<!--        #post-box {-->
-<!--            width: 500px;-->
-<!--            margin: 20px auto;-->
-<!--            padding: 50px;-->
-<!--            border: black solid;-->
-<!--            border-radius: 5px;-->
+        .form-control {
+            width: 100%;
+            font-family: "Stylish", sans-serif;
+        }
 
-<!--        }-->
-<!--    </style>-->
-<!--    <script>-->
-<!--        $(document).ready(function () {-->
-<!--            $("#cards-box").html("");-->
-<!--            showGourmet();-->
-<!--            $("#post-box").hide();-->
-<!--        });-->
+        #nav-comment {
+            text-align: right;
+        }
 
+        #post-box {
+            width: 500px;
+            margin: 20px auto;
+            padding: 50px;
+            border: black solid;
+            border-radius: 5px;
+        }
 
-<!--        function openClose() {-->
-<!--            // id 값 post-box의 display 값이 block 이면(= 눈에 보이면)-->
-<!--            if ($("#post-box").css("display") == "block") {-->
-<!--                // post-box를 가리고-->
-<!--                $("#post-box").hide();-->
-<!--                // 다시 버튼을 클릭하면, 박스 열기를 할 수 있게 텍스트 바꿔두기-->
-<!--                $("#btn-post-box").text("포스팅 박스 열기");-->
-<!--            } else {-->
-<!--                // 아니면(눈에 보이지 않으면) post-box를 펴라-->
-<!--                $("#post-box").show();-->
-<!--                // 다시 버튼을 클릭하면, 박스 닫기를 할 수 있게 텍스트 바꿔두기-->
-<!--                $("#btn-post-box").text("포스팅 박스 닫기");-->
-<!--            }-->
-<!--        }-->
+        .nav-item {
+            display: flex;
+        }
 
-<!--        function postGourmet() {-->
-<!--            let name = $("#post-title").val();-->
-<!--            let url = $("#post-comment").val();-->
-<!--            $.ajax({-->
-<!--                type: "POST",-->
-<!--                url: "/post",-->
-<!--                data: {name_give: name, url_give: url},-->
-<!--                success: function (response) { // 성공하면-->
-<!--                    if (response["result"] == "success") {-->
-<!--                        location.reload();-->
-<!--                    }-->
-<!--                }-->
-<!--            })-->
-<!--        }-->
-
-<!--        function likeGourmet(name) {-->
-<!--            $.ajax({-->
-<!--                type: "POST",-->
-<!--                url: "/post/like",-->
-<!--                data: {'name_give': name},-->
-<!--                success: function (response) {-->
-<!--                    if (response['result'] == 'success') {-->
-<!--                        // 2. '좋아요 완료!' 얼럿을 띄웁니다.-->
-<!--                        // alert('좋아요 완료!')-->
-<!--                        // 3. 변경된 정보를 반영하기 위해 새로고침합니다.-->
-<!--                        window.location.reload()-->
-<!--                    }-->
-<!--                }-->
-<!--            });-->
-<!--        }-->
-
-<!--        function deleteGourmet(name) {-->
-<!--            $.ajax({-->
-<!--                type: "POST",-->
-<!--                url: "/post/delete",-->
-<!--                data: {'name_give': name},-->
-<!--                success: function (response) {-->
-<!--                    if (response['result'] == 'success') {-->
-<!--                        alert('삭제 완료!');-->
-<!--                        window.location.reload();-->
-<!--                    }-->
-<!--                }-->
-<!--            });-->
-<!--        }-->
+    </style>
+    <script>
+        $(document).ready(function () {
+            $("#cards-box").html("");
+            showGourmet('ALL');
+            make_list();
+            $("#post-box").hide();
+        });
 
 
-<!--        function showGourmet() {-->
-<!--            $.ajax({-->
-<!--                type: "GET",-->
-<!--                url: "/show",-->
-<!--                data: {},-->
-<!--                success: function (response) {-->
-<!--                    let gourmet = response["gourmet"];-->
-<!--                    for (let i = 0; i < gourmet.length; i++) {-->
-<!--                        makeCard(gourmet[i]["name"], gourmet[i]["imgurl"], gourmet[i]["like"])-->
-<!--                    }-->
-<!--                }-->
-<!--            })-->
-<!--        }-->
+        function openClose() {
+            // id 값 post-box의 display 값이 block 이면(= 눈에 보이면)
+            if ($("#post-box").css("display") == "block") {
+                // post-box를 가리고
+                $("#post-box").hide();
+                // 다시 버튼을 클릭하면, 박스 열기를 할 수 있게 텍스트 바꿔두기
+                $("#btn-post-box").text("포스팅 박스 열기");
+            } else {
+                // 아니면(눈에 보이지 않으면) post-box를 펴라
+                $("#post-box").show();
+                // 다시 버튼을 클릭하면, 박스 닫기를 할 수 있게 텍스트 바꿔두기
+                $("#btn-post-box").text("포스팅 박스 닫기");
+            }
+        }
 
-<!--        function makeCard(name, imgurl, like) {-->
-<!--            let temp_html = `<div class="card" style="text-align: center">-->
-<!--                    <img class="card-img-top" src="${imgurl}" alt="Placeholder image">-->
-<!--                    <div class="card-deck">-->
-<!--                        <div class="card-body">-->
-<!--                            <a target="_blank" class="card-title">${name}</a>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div class="card-column">-->
-<!--                        <div class="card-footer" >-->
-<!--                            <a href="#" class="card-footer-item has-text-info">-->
-<!--                                <button type="button" class="btn btn-primary" onclick="likeGourmet('${name}')">좋아요 : ${like}</button>-->
-<!--                            </a>-->
-<!--                            <a href="#" class="card-footer-item has-text-info">-->
-<!--                                <button type="button" class="btn btn-primary" onclick=deleteGourmet('${name}')>삭제</button>-->
-<!--                            </a>-->
-<!--                        </div>-->
+        let list = ['ALL', '한식', '중식', '일식', '이탈리안', '카페·베이커리', '배달'];
 
-<!--                    </div>-->
-<!--                </div>`-->
+        function make_list() {
+            for (let i = 0; i < list.length; i++) {
+                let type = list[i];
+                // let tmp= `<a class="dropdown-item" onclick="showVillagers_per(per[${i}])">${list[i]}</a>`;
+                let tmp = `<button type="button"  class="dropdown-item" onclick=choose_menu(list[${i}])>${type}</button>`;
+                $("#menu").append(tmp);
 
-<!--                /*<div class="card">-->
-<!--    <p class="card-text comment">좋아요 개수 : ${like}</p>-->
-<!--    </div>*/-->
+                let tmp2 = `<li class="breadcrumb-item"><a href="#" onclick="showGourmet(list[${i}])">${type}</a></li>`;
+                $("#menu2").append(tmp2);
+            }
 
-<!--                $("#cards-box").append(temp_html);-->
-<!--            }-->
+        }
 
-<!--    </script>-->
+        function choose_menu(menu) {
+            $('#dropdownMenuButton').text(menu);
+        }
 
-<!--</head>-->
+        function postGourmet() {
+            let name = $("#post-title").val();
+            let url = $("#post-comment").val();
+            let menu = $('#dropdownMenuButton').text();
+            $.ajax({
+                type: "POST",
+                url: "/post",
+                data: {name_give: name, url_give: url, menu_give: menu},
+                success: function (response) { // 성공하면
+                    if (response["result"] == "success") {
+                        location.reload();
+                    }
+                }
+            })
+        }
 
-<!--<body>-->
+        function postGourmet() {
+            let name = $("#post-title").val();
+            let url = $("#post-comment").val();
+            let menu = $('#dropdownMenuButton').text();
+            $.ajax({
+                type: "POST",
+                url: "/post",
+                data: {name_give: name, url_give: url, menu_give: menu},
+                success: function (response) { // 성공하면
+                    if (response["result"] == "success") {
+                        Swal.fire({
+                            icon: 'success',
+                            title: '등록 완료!',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                        setTimeout(function () {
+                            location.reload(); //will redirect to your blog page (an ex: blog.html)
+                        }, 1800);
+                    }
+                }
+            })
+        }
 
-<!--&lt;!&ndash; 네비게이션바 &ndash;&gt;-->
-<!--<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">-->
-<!--    <a class="navbar-brand" href="{{ url_for('card') }}">메인페이지</a>-->
-<!--    <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav"-->
-<!--        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">-->
-<!--        <span class="navbar-toggler-icon"></span>-->
-<!--    </button>-->
-<!--    <div class="collapse navbar-collapse flex-grow-0" id="navbarNav">-->
-<!--        <ul class="navbar-nav">-->
-<!--            <li class="nav-item ">-->
-<!--                <a class="nav-link" href="{{ url_for('logout') }}">로그아웃</a>-->
-<!--            </li>-->
-<!--        </ul>-->
-<!--    </div>-->
-<!--</nav>-->
+        function likeGourmet(name) {
+            $.ajax({
+                type: "POST",
+                url: "/post/like",
+                data: {'name_give': name},
+                success: function (response) {
+                    if (response['result'] == 'success') {
+                        // 2. '좋아요 완료!' 얼럿을 띄웁니다.
+                        // alert('좋아요 완료!')
+                        Swal.fire({
+                            title: '좋아요 완료!',
+                            text: '최고의 맛집이 될 수 있을까?',
+                            imageUrl: 'https://cloudfront-ap-northeast-1.images.arcpublishing.com/chosun/C6NKSMEXD2Q343DREQHMWJ7RNY.png',
+                            imageWidth: 400,
+                            imageHeight: 200,
+                            imageAlt: 'Custom image',
+                        }).then(function () {
+                            window.location.reload();
+                        })
+                    }
+                }
+            });
+        }
 
-<!--<div class="wrap">-->
+        function deleteGourmet(name) {
+            $.ajax({
+                type: "POST",
+                url: "/post/delete",
+                data: {'name_give': name},
+                success: function (response) {
+                    if (response['result'] == 'success') {
+                        Swal.fire({
+                            title: '정말로 삭제하시겠습니까?',
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: '삭제하기'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                Swal.fire(
+                                    '삭제 완료!',
+                                    '다음에 또 만나요',
+                                    'success'
+                                ).then(function () {
+                                    window.location.reload();
+                                })
+                            }
+                        })
+                    }
+                }
+            });
+        }
 
-<!--    <div class="jumbotron">-->
-<!--        <nav class="navbar navbar-default navbar-static-top">-->
-<!--            <div class="container" style="display: flex; justify-content: flex-end;">-->
-<!--                <div class="comment" style="margin: auto">문지캠 맛집리스트</div>-->
-<!--                <button type="button" class="btn btn-primary" onclick="openClose()">추가</button>-->
-<!--            </div>-->
-<!--        </nav>-->
-<!--        <div id="post-box" class="form-post" style="align-items: center">-->
-<!--            <h1 class="display-4">Gourmet</h1>-->
-<!--            <hr class="my-4">-->
-<!--            <p class="lead">-->
-<!--            <div>-->
-<!--                <label for="post-title"></label>-->
-<!--                <input id="post-title" class="form-control" placeholder="맛집 이름을 입력하세요.">-->
-<!--            </div>-->
-<!--            <div class="form-group">-->
-<!--                <label for="post-comment"></label>-->
-<!--                <input id="post-comment" class="form-control" placeholder="맛집 링크를 입력하세요.">-->
-<!--            </div>-->
-<!--            <button type="button" class="btn btn-primary" onclick="postGourmet()">저장하기</button>-->
-<!--        </div>-->
-<!--    </div>-->
 
-<!--    <div id="cards-box" class="card-columns">-->
-<!--        <div class="card" style="text-align: center">-->
-<!--            <img class="card-img-top" src="https://cdn.emojidex.com/emoji/seal/%EF%BC%9F.png?1417137872"-->
-<!--                 alt="Placeholder image">-->
+        function showGourmet(menu) {
 
-<!--            <div class="card-deck">-->
-<!--                <div class="card-body">-->
-<!--                    <a target="_blank" class="card-title">가게 이름</a>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="card-column">-->
+            $("#cards-box").html("");
+            if (menu === 'ALL') {
+                $.ajax({
+                    type: "GET",
+                    url: "/showAll",
+                    data: {},
+                    success: function (response) {
+                        let gourmet = response["gourmet"];
+                        for (let i = 0; i < gourmet.length; i++) {
+                            makeCard(gourmet[i]["name"], gourmet[i]["imgurl"], gourmet[i]["menu"], gourmet[i]["like"])
+                        }
+                    }
+                })
+            } else {
+                $.ajax({
+                    type: "POST",
+                    url: "/showSelected",
+                    data: {'menu_give': menu},
+                    success: function (response) {
+                        let gourmet = response["gourmet"]
+                        for (let i = 0; i < gourmet.length; i++) {
+                            makeCard(gourmet[i]["name"], gourmet[i]["imgurl"], gourmet[i]["menu"], gourmet[i]["like"], gourmet[i]['url'])
+                        }
+                    }
+                })
+            }
 
-<!--                <div class="card-footer">-->
-<!--                    <a href="#" class="card-footer-item has-text-info">-->
-<!--                        <button type="button" class="btn btn-primary" onclick=alert('좋아요!')>좋아요!</button>-->
-<!--                    </a>-->
-<!--                    <a href="#" class="card-footer-item has-text-info">-->
-<!--                        <button type="button" class="btn btn-primary" onclick=alert('삭제!')>삭제!</button>-->
-<!--                    </a>-->
+        }
 
-<!--                </div>-->
-<!--                <div class="card">-->
-<!--                    <p class="card-text comment">좋아요 개수 : 0</p>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
-<!--</div>-->
-<!--</body>-->
+        function makeCard(name, imgurl, menu, like, url) {
+            let temp_html = `<div class="card" style="text-align: center">
+                    <a href="${url}" target="_blank">
+                        <img class="card-img-top" src="${imgurl}" alt="Placeholder image">
+                    </a>
+                    <div class="card-deck">
+                        <div class="card-body">
+                            <h5 class="card-title">${name}</h5>
+    <p class="card-text">${menu}</p>
 
-<!--</html>-->
+                        </div>
+                    </div>
+
+                    <div class="card-column">
+                        <div class="card-footer" >
+                            <a href="#" class="card-footer-item has-text-info">
+                                <button type="button" class="btn btn-primary"  onclick="likeGourmet('${name}')"><span class="icon">
+              <i class="fas fa-thumbs-up"></i>
+            </span>좋아요 : ${like}</button>
+                            </a>
+                            <a href="#" class="card-footer-item has-text-info">
+                                <button type="button" class="btn btn-warning" onclick=deleteGourmet('${name}')>삭제</button>
+                            </a>
+                        </div>
+                    </div>
+                </div>`
+
+            $("#cards-box").append(temp_html);
+        }
+
+    </script>
+
+</head>
+
+<body>
+
+
+<!-- 네비게이션바 -->
+<div class="wrap">
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark border-bottom">
+        <a class="navbar-brand" href="{{ url_for('card') }}">메인페이지</a>
+        <div class="collapse navbar-collapse flex-grow-0" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('logout') }}">로그아웃</a>
+                </li>
+                <li class="nav-text active" id="nav-comment">
+                    <a class="nav-link">{{ template_name }}님 환영합니다!</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="jumbotron">
+        <nav class="navbar navbar-default navbar-static-top">
+            <div class="container" style="display: flex; justify-content: flex-end;">
+                <div class="comment" style="margin: auto">문지캠퍼스 맛집리스트</div>
+                <button type="button" class="btn btn-primary btn-lg" onclick="openClose()">추가</button>
+            </div>
+        </nav>
+        <div id="post-box" class="form-post" style="align-items: center">
+            <h1 class="display-4">Gourmet</h1>
+            <hr class="my-4">
+            <p class="lead">
+            <div>
+                <label for="post-title"></label>
+                <input id="post-title" class="form-control" placeholder="맛집 이름을 입력하세요.">
+            </div>
+            <div class="form-group">
+                <label for="post-comment"></label>
+                <input id="post-comment" class="form-control" placeholder="맛집 링크를 입력하세요.">
+            </div>
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    선택
+                </button>
+                <div class="dropdown-menu" id="menu" aria-labelledby="dropdownMenuButton">
+                </div>
+                <button type="button" class="btn btn-primary" onclick="postGourmet()">저장하기</button>
+            </div>
+        </div>
+    </div>
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb" id="menu2">
+        </ol>
+    </nav>
+
+    <div id="cards-box" class="card-columns">
+        <div class="card" style="text-align: center">
+            <img class="card-img-top" src="https://cdn.emojidex.com/emoji/seal/%EF%BC%9F.png?1417137872"
+                 alt="Placeholder image">
+
+            <div class="card-deck">
+                <div class="card-body">
+                    <a target="_blank" class="card-title">가게 이름</a>
+                </div>
+            </div>
+            <div class="card-column">
+
+                <div class="card-footer">
+                    <a href="#" class="card-footer-item has-text-info">
+                        <button type="button" class="btn btn-primary" onclick=alert('좋아요!')>좋아요!</button>
+                    </a>
+                    <a href="#" class="card-footer-item has-text-info">
+                        <button type="button" class="btn btn-primary" onclick=alert('삭제!')>삭제!</button>
+                    </a>
+
+                </div>
+                <div class="card">
+                    <p class="card-text comment">좋아요 개수 : 0</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</body>
+
+</html>
