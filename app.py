@@ -88,7 +88,6 @@ def show_gourmet_all():
 def show_gourmet_selected():
     menu_receive = request.form['menu_give']
     result = list(db.gourmet.find({'menu':menu_receive}, {'_id': 0}))
-    print(result)
     return jsonify({'result': 'success', 'gourmet': result})
 
 
