@@ -36,9 +36,13 @@
             text-align: center;
         }
 
-        .index-input {
-            width: 50%;
+        .wrap {
+            width: 70%;
             margin: auto;
+        }
+
+        .index-input {
+            width: 300px;
         }
 
         .div-btn {
@@ -58,7 +62,7 @@
                 url: "/login",
                 data: {'id_give': id, 'pw_give': pw},
                 success: function (response) { // 성공하면
-                    if (response["result"] == "success") {
+                    if (response['result'] == 'success') {
                         // alert("로그인 완료!");
                         Swal.fire({
                             icon: 'success',
@@ -111,26 +115,31 @@
 </head>
 
 <body>
-<div class="jumbotron">
-    <div id="post-box" class="form-post">
-        <h1 class="display-4">WEEK 00</h1>
-        <div class="index-input">
-            <div>
-                <label for="input-id">ID
-                    <input id="input-id" class="form-control" placeholder="아이디를 입력해주세요.">
-                </label>
-            </div>
-            <div>
-                <label for="input-pw">PW
-                    <input type="password" id="input-pw" class="form-control" placeholder="비밀번호를 입력해주세요.">
-                </label>
-            </div>
+<div class="wrap">
+    <div class="jumbotron">
+        <div id="post-box" class="form-post">
+            <h1 class="display-4">JUNGLE ROAD</h1>
+            <center>
+                <div class="index-input">
+                    <div>
+                        <label for="input-id" style="text-align: left">ID
+                            <input id="input-id" class="form-control" placeholder="아이디를 입력해주세요.">
+                        </label>
+                    </div>
+                    <div>
+                        <label for="input-pw" style="text-align: left">PW
+                            <input type="password" id="input-pw" class="form-control" placeholder="비밀번호를 입력해주세요.">
+                        </label>
+                    </div>
 
-            <div class="div-btn">
-                <button onclick="login()" type="button" class="btn btn-primary">로그인</button>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">회원가입
-                </button>
-            </div>
+                    <div class="div-btn">
+                        <button onclick="login()" type="button" class="btn btn-primary">로그인</button>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+                            회원가입
+                        </button>
+                    </div>
+                </div>
+            </center>
         </div>
     </div>
 </div>
@@ -164,6 +173,7 @@
         </div>
     </div>
 </div>
+
 
 </body>
 </html>

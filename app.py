@@ -74,7 +74,8 @@ def logout():
 def card():
     if 'user' in session:
         # 로그인 상태가 아닐 경우 (세션에 user가 없을 경우)
-        return render_template('cards.html')
+        return render_template('cards.html',
+                               template_name=session['user'])
     return redirect(url_for('home'))
 
 
