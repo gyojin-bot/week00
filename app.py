@@ -11,10 +11,12 @@ db = client.users
 app = Flask(__name__)
 app.secret_key = 'asdfgh123'
 
+
 @app.before_request
 def before_request():
     session.permanent = True
     app.permanent_session_lifetime = timedelta(minutes=5)
+
 
 @app.route('/')
 def home():
@@ -43,9 +45,9 @@ def register():
 def login():
     id_receive = request.form['id_give']
     pw_receive = request.form['pw_give']
-    user = db.users.find_one({'id': id_receive}, {'pw': pw_receive})
-    # print(user)
-    if user is not None:
+    user = db.users.find_one({'id': id_receive})
+
+    if user is not None and pw_receive == user['pw']:
         # 유저가 db에 있을 경우
         session['user'] = id_receive
         # print(session)
@@ -53,6 +55,7 @@ def login():
         return jsonify({'result': 'success'})
     else:
         return jsonify({'result': 'fail'})
+
 
 @app.route('/logout')
 def logout():
@@ -67,6 +70,7 @@ def card():
         return render_template('cards.html')
     return redirect(url_for('home'))
 
+
 @app.route('/show', methods=['GET'])
 def show_gourmet():
     result = list(db.gourmet.find({}, {'_id': 0}))
@@ -78,14 +82,14 @@ def like_gourmet():
     name_receive = request.form['name_give']
 
     gourmet = db.gourmet.find_one({'name': name_receive})
-    new_like = gourmet['like']+1
+    new_like = gourmet['like'] + 1
     db.gourmet.update_one({'name': name_receive}, {'$set': {'like': new_like}})
     return jsonify({'result': 'success'})
 
 
 @app.route('/post/delete', methods=['POST'])
 def delete_gourmet():
-    name_receive =request.form['name_give']
+    name_receive = request.form['name_give']
 
     db.gourmet.delete_one({'name': name_receive})
     return jsonify({'result': 'success'})
@@ -115,13 +119,14 @@ def post_gourmet():
 
     gourmet = {
         'name': name_receive,
-         'imgurl': imgurl,
+        'imgurl': imgurl,
         'like': 0
     }
 
     db.gourmet.insert_one(gourmet)
 
     return jsonify({'result': 'success'})
+
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
