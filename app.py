@@ -7,6 +7,7 @@ from pip._vendor import requests
 from pymongo import MongoClient
 
 client = MongoClient('localhost', 27017)
+# client = MongoClient('mongodb://test:test@13.124.88.25', 27017)
 db = client.users
 
 app = Flask(__name__)
@@ -88,7 +89,7 @@ def show_gourmet_all():
 @app.route('/showSelected', methods=['POST'])
 def show_gourmet_selected():
     menu_receive = request.form['menu_give']
-    result = list(db.gourmet.find({'menu':menu_receive}, {'_id': 0}))
+    result = list(db.gourmet.find({'menu': menu_receive}, {'_id': 0}))
     return jsonify({'result': 'success', 'gourmet': result})
 
 
@@ -127,7 +128,12 @@ def post_gourmet():
     soup = BeautifulSoup(data.text, 'html.parser')
 
     # name = soup.select_one('#og\:title')
-    imgurl = soup.select_one('#og\:image')['content']
+    get_imgurl = soup.select_one('meta[property="og:image"]')
+    imgurl = get_imgurl['content']
+
+    print(url_receive)
+
+    # og\:image
     # tmp = soup.select_one('place_thumb')
     # imgurl = tmp.find('img')
 

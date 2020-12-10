@@ -15,21 +15,22 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <!--    font awesome-->
-    <<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
 
-<!--    &lt;!&ndash; Bootstrap CSS &ndash;&gt;-->
-<!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"-->
-<!--          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"-->
-<!--          crossorigin="anonymous">-->
-<!--    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>-->
-<!--    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>-->
+    <!--    &lt;!&ndash; Bootstrap CSS &ndash;&gt;-->
+    <!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"-->
+    <!--          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"-->
+    <!--          crossorigin="anonymous">-->
+    <!--    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>-->
+    <!--    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>-->
 
-<!--    &lt;!&ndash; JS &ndash;&gt;-->
-<!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>-->
-<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>-->
-<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"-->
-<!--            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"-->
-<!--            crossorigin="anonymous"></script>-->
+    <!--    &lt;!&ndash; JS &ndash;&gt;-->
+    <!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>-->
+    <!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>-->
+    <!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"-->
+    <!--            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"-->
+    <!--            crossorigin="anonymous"></script>-->
 
     <!-- Sweetalert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
@@ -40,7 +41,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
 
 
-    <title>WEEK 00</title>
+    <title>JUNGLE GOURMET</title>
 
     <!-- style -->
     <style type="text/css">
@@ -134,22 +135,6 @@
                 data: {name_give: name, url_give: url, menu_give: menu},
                 success: function (response) { // 성공하면
                     if (response["result"] == "success") {
-                        location.reload();
-                    }
-                }
-            })
-        }
-
-        function postGourmet() {
-            let name = $("#post-title").val();
-            let url = $("#post-comment").val();
-            let menu = $('#dropdownMenuButton').text();
-            $.ajax({
-                type: "POST",
-                url: "/post",
-                data: {name_give: name, url_give: url, menu_give: menu},
-                success: function (response) { // 성공하면
-                    if (response["result"] == "success") {
                         Swal.fire({
                             icon: 'success',
                             title: '등록 완료!',
@@ -230,7 +215,7 @@
                     success: function (response) {
                         let gourmet = response["gourmet"];
                         for (let i = 0; i < gourmet.length; i++) {
-                            makeCard(gourmet[i]["name"], gourmet[i]["imgurl"], gourmet[i]["menu"], gourmet[i]["like"])
+                            makeCard(gourmet[i]["name"], gourmet[i]["imgurl"], gourmet[i]["menu"], gourmet[i]["like"],gourmet[i]['url'])
                         }
                     }
                 })
